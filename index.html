@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Mini Loan App</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to Mini Loan App</h2>
+        <p>Manage your loans and repayments easily.</p>
+        
+        <div id="actions">
+            <!-- Redirect buttons -->
+            <a href="login.html"><button id="loginBtn">Login</button></a>
+            
+            <a href="admin-login.html"><button>admin</button></a>
+        </div>
+    </div>
+
+    <script>
+        // Placeholder for checking if the user is logged in
+        let isAuthenticated = false;  // Replace with actual authentication check
+
+        // Redirect to dashboard if already logged in
+        if (isAuthenticated) {
+            document.getElementById('loginBtn').style.display = 'none'; // Hide Login button
+        }
+
+        // Loan Request button click
+        document.getElementById('requestLoanBtn').onclick = function() {
+            if (isAuthenticated) {
+                // Redirect to loan request page if authenticated
+                window.location.href = "loan-request.html";
+            } else {
+                // Redirect to login page if not authenticated
+                alert('Please log in to request a loan.');
+                window.location.href = "login.html";
+            }
+        };
+
+        // Repayment button click
+        document.getElementById('repaymentBtn').onclick = function() {
+            if (isAuthenticated) {
+                // Redirect to repayment page if authenticated
+                window.location.href = "repayment.html";
+            } else {
+                // Redirect to login page if not authenticated
+                alert('Please log in to make a repayment.');
+                window.location.href = "login.html";
+            }
+        };
+    </script>
+</body>
+</html>

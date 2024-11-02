@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Admin Login - Mini Loan App</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Login</h2>
+        
+        <form id="adminLoginForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+
+            <button type="submit">Login</button>
+            <p id="loginError" class="error-message"></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simple hardcoded admin credentials
+            if (username === "admin" && password === "admin123") {
+                localStorage.setItem("isAdminLoggedIn", "true");
+                alert("Login successful!");
+                window.location.href = "admin-approval.html";
+            } else {
+                document.getElementById('loginError').textContent = "Invalid username or password.";
+            }
+        };
+    </script>
+</body>
+</html>

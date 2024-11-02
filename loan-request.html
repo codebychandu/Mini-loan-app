@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Loan Request - Mini Loan App</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Request a Loan</h2>
+        <form id="loanRequestForm">
+            <label for="amount">Loan Amount ($)</label>
+            <input type="number" id="amount" required>
+
+            <label for="term">Loan Term (weeks)</label>
+            <input type="number" id="term" required>
+
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" required>
+
+            <button type="submit">Submit Request</button>
+            <p id="loanRequestError" class="error-message"></p>
+        </form>
+        
+        <!-- Display loan schedule -->
+        <div id="scheduleDisplay" style="display: none;">
+            <h3>Scheduled Repayments</h3>
+            <ul id="repaymentList"></ul>
+            <a href="repayment.html"><button >Repayment</button></a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loanRequestForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            // Get form inputs
+            const amount = parseFloat(document.getElementById('amount').value);
+            const term = parseInt(document.getElementById('term').value);
+            const startDate = new Date(document.getElementById('startDate').value);
+
+            if (amount <= 0 || term <= 0) {
+                document.getElementById('loanRequestError').textContent = 'Please enter valid loan amount and term.';
+                return;
+            }
+
+            // Calculate weekly repayment amount
+            let weeklyRepaymentAmount = (amount / term).toFixed(2);
+
+            // Create loan object with PENDING status
+            const loan = {
+                amount: amount,
+                term: term,
+                status: 'PENDING',
+                repayments: []
+            };
+
+            // Generate repayment schedule
+            for (let i = 0; i < term; i++) {
+                const repaymentDate = new Date(startDate);
+                repaymentDate.setDate(startDate.getDate() + (7 * (i + 1)));  // Set weekly repayment date
+
+                // Adjust last repayment amount to handle rounding issues
+                const adjustedAmount = (i === term - 1)
+                    ? (amount - (weeklyRepaymentAmount * (term - 1))).toFixed(2)
+                    : weeklyRepaymentAmount;
+
+                // Add repayment to loan's repayment schedule
+                loan.repayments.push({
+                    dueDate: repaymentDate.toDateString(),
+                    amount: adjustedAmount,
+                    status: 'PENDING'
+                });
+            }
+
+            // Display generated loan schedule in UI
+            document.getElementById('scheduleDisplay').style.display = 'block';
+            const repaymentList = document.getElementById('repaymentList');
+            repaymentList.innerHTML = '';  // Clear previous content
+
+            loan.repayments.forEach((repayment, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Repayment ${index + 1}: ${repayment.dueDate} - $${repayment.amount} (Status: ${repayment.status})`;
+                repaymentList.appendChild(listItem);
+            });
+
+            alert('Loan request submitted successfully!');
+            
+            // Reset form fields
+            document.getElementById('loanRequestForm').reset();
+        };
+    </script>
+</body>
+</html>

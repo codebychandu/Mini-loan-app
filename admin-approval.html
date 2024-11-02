@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Loan Approval - Mini Loan App</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Loan Approval</h2>
+        
+        <div id="pendingLoans">
+            <h3>Pending Loans</h3>
+            <ul id="loanList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Simulated loan data
+        const loans = [
+            {
+                id: 1,
+                customerName: 'John Doe',
+                amount: 10000,
+                term: 3,
+                status: 'PENDING',
+                repayments: [
+                    { dueDate: '2023-02-14', amount: 3333.33, status: 'PENDING' },
+                    { dueDate: '2023-02-21', amount: 3333.33, status: 'PENDING' },
+                    { dueDate: '2023-02-28', amount: 3333.34, status: 'PENDING' }
+                ]
+            },
+            {
+                id: 2,
+                customerName: 'Jane Smith',
+                amount: 5000,
+                term: 2,
+                status: 'PENDING',
+                repayments: [
+                    { dueDate: '2023-03-01', amount: 2500, status: 'PENDING' },
+                    { dueDate: '2023-03-08', amount: 2500, status: 'PENDING' }
+                ]
+            }
+        ];
+
+        // Display pending loans in the UI
+        const loanList = document.getElementById('loanList');
+        loans.forEach((loan) => {
+            if (loan.status === 'PENDING') {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <strong>Customer:</strong> ${loan.customerName} <br>
+                    <strong>Loan Amount:</strong> $${loan.amount} <br>
+                    <strong>Term:</strong> ${loan.term} weeks <br>
+                    <strong>Status:</strong> <span id="status-${loan.id}">${loan.status}</span> <br>
+                    <button onclick="approveLoan(${loan.id})">Approve</button>
+                `;
+                loanList.appendChild(listItem);
+            }
+        });
+
+        // Approve loan function
+        function approveLoan(loanId) {
+            const loan = loans.find(loan => loan.id === loanId);
+            if (loan && loan.status === 'PENDING') {
+                loan.status = 'APPROVED';
+                document.getElementById(`status-${loanId}`).textContent = loan.status;
+                alert(`Loan for ${loan.customerName} has been approved.`);
+            }
+        }
+    </script>
+</body>
+</html>
